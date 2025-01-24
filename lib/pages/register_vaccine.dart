@@ -1,3 +1,5 @@
+// Update the `RegisterVaccinePage` class in `lib/pages/register_vaccine.dart`
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -17,6 +19,8 @@ class RegisterVaccinePage extends StatelessWidget {
     final vaccineNameController = TextEditingController();
     final dateController = TextEditingController();
     final vetController = TextEditingController();
+    final List<String> doctorNames = Data.getDoctors().map((doctor) => doctor.name).toList();
+    String? selectedDoctor;
 
     Future<void> selectDate(BuildContext context) async {
       final DateTime? picked = await showDatePicker(
@@ -33,8 +37,8 @@ class RegisterVaccinePage extends StatelessWidget {
     void registerVaccine() {
       final vaccineName = vaccineNameController.text;
       final date = dateController.text;
-      final vet = vetController.text;
-      if (vaccineName.isNotEmpty && date.isNotEmpty && vet.isNotEmpty) {
+      final vet = selectedDoctor;
+      if (vaccineName.isNotEmpty && date.isNotEmpty && vet != null) {
         final vaccine = Vaccine(name: vaccineName, date: date, vet: vet);
         Data.addVaccineToPet(pet.id, vaccine);
         ScaffoldMessenger.of(context).showSnackBar(
@@ -78,69 +82,78 @@ class RegisterVaccinePage extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15.0),
-            ),
-            elevation: 8.0,
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Form(
-                key: formKey,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text('ID de la Mascota: ${pet.id}'),
-                    const SizedBox(height: 10),
-                    Text('Nombre de la Mascota: ${pet.name}'),
-                    const SizedBox(height: 30),
-                    TextFormField(
-                      controller: vaccineNameController,
-                      decoration: inputDecoration('Nombre de la Vacuna'),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Por favor ingrese el nombre de la vacuna';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 10),
-                    GestureDetector(
-                      onTap: () => selectDate(context),
-                      child: AbsorbPointer(
-                        child: TextFormField(
-                          controller: dateController,
-                          decoration: inputDecoration('Fecha de Administración'),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Por favor ingrese la fecha de administración';
-                            }
-                            return null;
-                          },
-                        ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15.0),
+          ),
+          elevation: 8.0,
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Form(
+              key: formKey,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text('ID de la Mascota: ${pet.id}'),
+                  const SizedBox(height: 10),
+                  Text('Nombre de la Mascota: ${pet.name}'),
+                  const SizedBox(height: 30),
+                  TextFormField(
+                    controller: vaccineNameController,
+                    decoration: inputDecoration('Nombre de la Vacuna'),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Por favor ingrese el nombre de la vacuna';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 10),
+                  GestureDetector(
+                    onTap: () => selectDate(context),
+                    child: AbsorbPointer(
+                      child: TextFormField(
+                        controller: dateController,
+                        decoration: inputDecoration('Fecha de Administración'),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Por favor ingrese la fecha de administración';
+                          }
+                          return null;
+                        },
                       ),
                     ),
-                    const SizedBox(height: 10),
-                    TextFormField(
-                      controller: vetController,
-                      decoration: inputDecoration('Veterinario'),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Por favor ingrese el nombre del veterinario';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 20),
-                    ElevatedButton(
-                      onPressed: registerVaccine,
-                      child: const Text('Registrar'),
-                    ),
-                  ],
-                ),
+                  ),
+                  const SizedBox(height: 10),
+                  DropdownButtonFormField<String>(
+                    decoration: inputDecoration('Veterinario'),
+                    value: selectedDoctor,
+                    items: doctorNames.map((String doctor) {
+                      return DropdownMenuItem<String>(
+                        value: doctor,
+                        child: Text(doctor),
+                      );
+                    }).toList(),
+                    onChanged: (String? newValue) {
+                      selectedDoctor = newValue;
+                    },
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Por favor seleccione un veterinario';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: registerVaccine,
+                    child: const Text('Registrar'),
+                  ),
+                ],
               ),
             ),
           ),
         ),
+      ),
     );
   }
 }

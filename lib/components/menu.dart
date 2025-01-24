@@ -1,3 +1,5 @@
+// Update the `Menu` class in `lib/components/menu.dart`
+
 import 'package:flutter/material.dart';
 import '../pages/vaccines_list.dart';
 import '../utils/constants.dart';
@@ -7,6 +9,8 @@ import '../pages/owners_list.dart';
 import '../pages/login.dart';
 import '../pages/dashboard.dart';
 import '../pages/pets_list.dart';
+import '../pages/register_doctor.dart';
+import '../pages/doctors_list.dart'; // Import the DoctorsListPage
 
 class Menu extends StatelessWidget {
   const Menu({super.key});
@@ -50,6 +54,16 @@ class Menu extends StatelessWidget {
                   );
                 },
               ),
+              ListTile(
+                leading: const Icon(Icons.person_add, color: AppConstants.iconColor),
+                title: const Text(MenuStrings.registerDoctor, style: TextStyle(color: AppConstants.textColor)),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => RegisterDoctorPage()),
+                  );
+                },
+              ),
             ],
           ),
           ExpansionTile(
@@ -73,6 +87,16 @@ class Menu extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => const PetsListPage()),
+                  );
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.medical_services, color: AppConstants.iconColor),
+                title: const Text('Lista de Doctores', style: TextStyle(color: AppConstants.textColor)), // Add this ListTile
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const DoctorsListPage()),
                   );
                 },
               ),

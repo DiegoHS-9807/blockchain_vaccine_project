@@ -3,6 +3,7 @@ class MenuStrings {
   static const String home = 'Inicio';
   static const String register = 'Registrar';
   static const String registerOwner = 'Registrar Propietario';
+  static const String registerDoctor = 'Registrar Doctor';
   static const String registerPet = 'Registrar Mascota';
   static const String view = 'Visualizar';
   static const String ownersList = 'Lista de Propietarios';

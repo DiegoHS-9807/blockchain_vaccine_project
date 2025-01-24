@@ -1,3 +1,6 @@
+// File: lib/data/data.dart
+
+import '../models/doctor.dart';
 import '../models/owner.dart';
 import '../models/pet.dart';
 import '../models/vaccine.dart';
@@ -44,6 +47,21 @@ class Data {
     ),
   ];
 
+  static final List<Doctor> doctors = [
+    Doctor(
+      id: '1',
+      name: 'Dr. Smith',
+      specialty: 'General',
+      contact: '123-456-7890',
+    ),
+    Doctor(
+      id: '2',
+      name: 'Dr. Johnson',
+      specialty: 'Dermatología',
+      contact: '123-456-7890',
+    ),
+  ];
+
   static void addOwner(Owner owner) {
     owners.add(owner);
   }
@@ -82,5 +100,17 @@ class Data {
   static List<Vaccine> getVaccinesForPet(String petId) {
     final pet = getPetById(petId);
     return pet?.vaccines ?? [];
+  }
+
+  static void addDoctor(Doctor doctor) {
+    doctors.add(doctor);
+  }
+
+  static List<Doctor> getDoctors() {
+    return doctors;
+  }
+
+  static generateDoctorId() {
+    return doctors.length.toString();
   }
 }
